@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .serializers import SeatAllotSerializer, \
     SeatAllotResponseSerializer, \
     VacateSeatSerializer
+from .permissions import seatNumberCheckPermission
 
 seats = dict.fromkeys(i for i in range(1, settings.MAX_OCCUPANCY + 1))
 
@@ -12,10 +13,12 @@ class occupySeat(generics.CreateAPIView):
     serializer_class = SeatAllotSerializer
 
     def create(self, request, *args, **kwargs):
-        if seats[settings.MAX_OCCUPANCY] is not None:
-            return Response(data={"Message": "Theatre is fully occupied!"})
-
         serializer = self.serializer_class(data=request.data)
+        if seats[settings.MAX_OCCUPANCY] is not None:
+            error_message = "Theatre is fully occupied!"
+            return Response(data={
+                "Message": error_message
+            }, status=status.HTTP_403_FORBIDDEN)
         if serializer.is_valid():
             name = serializer.data['name']
             error_message = "A ticket with this UUID has already been booked!"
@@ -26,7 +29,7 @@ class occupySeat(generics.CreateAPIView):
                     if seats[key]['ticket'] == ticket:
                         return Response(data={
                             "Message": error_message
-                        })
+                        }, status=status.HTTP_409_CONFLICT)
                     else:
                         pass
                 else:
@@ -56,6 +59,7 @@ class occupySeat(generics.CreateAPIView):
 
 class vacateSeat(generics.DestroyAPIView):
     serializer_class = VacateSeatSerializer
+    permission_classes = (seatNumberCheckPermission, )
 
     def delete(self, request, *args, **kwargs):
         seat_number = request.data['seat_number']
@@ -73,8 +77,3 @@ class vacateSeat(generics.DestroyAPIView):
                 return Response(data={
                     "Message": error_message
                 }, status=status.HTTP_404_NOT_FOUND)
-        print(seats)
-        error_message = "Seat number doesn't exist!"
-        return Response(data={
-            "Message": error_message
-        }, status=status.HTTP_404_NOT_FOUND)
