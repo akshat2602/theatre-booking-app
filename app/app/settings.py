@@ -77,6 +77,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 
 # Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+    }
+}
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
@@ -118,7 +124,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-MAX_OCCUPANCY = 50
+MAX_OCCUPANCY = 1
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 

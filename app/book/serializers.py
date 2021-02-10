@@ -1,23 +1,16 @@
 from rest_framework import serializers
 
 
-class SeatSerializer(serializers.Serializer):
+class SeatAllotSerializer(serializers.Serializer):
     ticket = serializers.UUIDField()
     name = serializers.CharField(max_length=50)
 
-    def update(self, instance, validated_data):
-        pass
 
-    def create(self, validated_data):
-        pass
-
-class ResponseSerializer(serializers.Serializer):
+class SeatAllotResponseSerializer(serializers.Serializer):
     ticket = serializers.UUIDField()
     name = serializers.CharField(max_length=50)
     seat_number = serializers.IntegerField()
 
-    def update(self, instance, validated_data):
-        pass
 
-    def create(self, validated_data):
-        pass
+class VacateSeatSerializer(serializers.Serializer):
+    seat_number = serializers.IntegerField()
