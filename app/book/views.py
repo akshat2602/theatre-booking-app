@@ -18,13 +18,14 @@ class occupySeat(generics.CreateAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             name = serializer.data['name']
+            error_message = "A ticket with this UUID has already been booked!"
             ticket = serializer.data['ticket']
             seat_number = 0
             for key, values in seats.items():
                 if seats[key] is not None:
                     if seats[key]['ticket'] == ticket:
                         return Response(data={
-                            "Message": "A ticket with this UUID has already been booked!"
+                            "Message": error_message
                         })
                     else:
                         pass
@@ -62,15 +63,18 @@ class vacateSeat(generics.DestroyAPIView):
             if seats[seat_number]:
                 seats[seat_number] = None
                 print(seats)
+                error_message = "The provided seat number has been vacated!"
                 return Response(data={
-                    "Message": "The provided seat number has been vacated!"
+                    "Message": error_message
                 }, status=status.HTTP_204_NO_CONTENT)
             else:
                 print(seats)
+                error_message = "The provided seat number is vacant already!"
                 return Response(data={
-                    "Message": "The provided seat number is vacant already!"
+                    "Message": error_message
                 }, status=status.HTTP_404_NOT_FOUND)
         print(seats)
+        error_message = "Seat number doesn't exist!"
         return Response(data={
-            "Message": "Seat number doesn't exist!"
+            "Message": error_message
         }, status=status.HTTP_404_NOT_FOUND)
