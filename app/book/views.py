@@ -103,6 +103,7 @@ def getInfoResponse(ticket, name, seat_number):
 
 
 class getInfo(generics.RetrieveAPIView):
+    serializer_class = SeatInfoResponseSerializer
 
     def retrieve(self, request, pk, *args, **kwargs):
         if is_uuid(pk):
