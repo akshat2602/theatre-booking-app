@@ -1,7 +1,9 @@
 from django.conf import settings
-from rest_framework import generics, status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from uuid import UUID
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
 from .serializers import SeatAllotSerializer, \
     SeatInfoResponseSerializer, \
     VacateSeatSerializer
@@ -10,10 +12,37 @@ from .permissions import seatNumberCheckPermission
 seats = dict.fromkeys(i for i in range(1, settings.MAX_OCCUPANCY + 1))
 
 
+def is_uuid(string):
+    try:
+        uuid_object = UUID(string, version=4)
+    except ValueError:
+        return False
+    return str(uuid_object) == string
+
+
+def getInfoResponse(ticket, name, seat_number):
+    serializer = SeatInfoResponseSerializer(
+        data={
+            "seat_number": seat_number,
+            "ticket": ticket,
+            "name": name
+        })
+    if serializer.is_valid():
+        return Response(data=serializer.data,
+                        status=status.HTTP_302_FOUND)
+    return Response(data=serializer.errors,
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class occupySeat(generics.CreateAPIView):
     serializer_class = SeatAllotSerializer
 
-    def create(self, request, *args, **kwargs):
+    @swagger_auto_schema(responses={201: SeatInfoResponseSerializer})
+    def post(self, request, *args, **kwargs):
+        """
+        Request: Send ticket id and name to book a seat
+        Response: Returns ticket id, name and seat number if success
+        """
         serializer = self.serializer_class(data=request.data)
         if seats[settings.MAX_OCCUPANCY] is not None:
             error_message = "Theatre is fully occupied!"
@@ -62,15 +91,20 @@ class vacateSeat(generics.DestroyAPIView):
     serializer_class = VacateSeatSerializer
     permission_classes = (seatNumberCheckPermission,)
 
+    @swagger_auto_schema(request_body=VacateSeatSerializer)
     def delete(self, request, *args, **kwargs):
+        """
+        Request: Send seat number in request to vacate the seat
+        Response: Return a message of success or failure
+        """
         seat_number = request.data['seat_number']
         if settings.MAX_OCCUPANCY >= seat_number:
             if seats[seat_number]:
                 seats[seat_number] = None
                 print(seats)
-                error_message = "The provided seat number has been vacated!"
+                message = "The provided seat number has been vacated!"
                 return Response(data={
-                    "Message": error_message
+                    "Message": message
                 }, status=status.HTTP_204_NO_CONTENT)
             else:
                 print(seats)
@@ -80,32 +114,16 @@ class vacateSeat(generics.DestroyAPIView):
                 }, status=status.HTTP_404_NOT_FOUND)
 
 
-def is_uuid(string):
-    try:
-        uuid_object = UUID(string, version=4)
-    except ValueError:
-        return False
-    return str(uuid_object) == string
-
-
-def getInfoResponse(ticket, name, seat_number):
-    serializer = SeatInfoResponseSerializer(
-        data={
-            "seat_number": seat_number,
-            "ticket": ticket,
-            "name": name
-        })
-    if serializer.is_valid():
-        return Response(data=serializer.data,
-                        status=status.HTTP_302_FOUND)
-    return Response(data=serializer.errors,
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class getInfo(generics.RetrieveAPIView):
+class getInfo(APIView):
     serializer_class = SeatInfoResponseSerializer
 
-    def retrieve(self, request, pk, *args, **kwargs):
+    @swagger_auto_schema(responses={200: SeatInfoResponseSerializer})
+    def get(self, request, pk):
+        """
+        PK: Send seat number or ticket id or name in request to get seat info
+        Request: Nothing expected in request
+        Response: Return serializer with seat information
+        """
         if is_uuid(pk):
             error_message = "No seat is booked with the provided ticket ID!"
             for key, value in seats.items():
@@ -113,11 +131,13 @@ class getInfo(generics.RetrieveAPIView):
                     resp = getInfoResponse(ticket=pk,
                                            name=seats[key]['name'],
                                            seat_number=key)
+                    print(resp)
                     return resp
 
-                return Response(data={
-                    "Message": error_message
-                }, status=status.HTTP_404_NOT_FOUND)
+            print(seats)
+            return Response(data={
+                "Message": error_message
+            }, status=status.HTTP_404_NOT_FOUND)
 
         elif pk.isnumeric():
             error_message = "No seat is booked with this seat number"
@@ -126,8 +146,10 @@ class getInfo(generics.RetrieveAPIView):
                     resp = getInfoResponse(ticket=seats[key]['ticket'],
                                            name=seats[key]['name'],
                                            seat_number=pk)
+                    print(resp)
                     return resp
 
+            print(seats)
             return Response(data={
                 "Message": error_message
             }, status=status.HTTP_404_NOT_FOUND)
@@ -139,8 +161,10 @@ class getInfo(generics.RetrieveAPIView):
                     resp = getInfoResponse(ticket=seats[key]['ticket'],
                                            name=pk,
                                            seat_number=key)
+                    print(resp)
                     return resp
 
+            print(seats)
             return Response(data={
-                    "Message": error_message
-                }, status=status.HTTP_404_NOT_FOUND)
+                "Message": error_message
+            }, status=status.HTTP_404_NOT_FOUND)
