@@ -127,12 +127,13 @@ class getInfo(APIView):
         if is_uuid(pk):
             error_message = "No seat is booked with the provided ticket ID!"
             for key, value in seats.items():
-                if seats[key]['ticket'] == pk:
-                    resp = getInfoResponse(ticket=pk,
-                                           name=seats[key]['name'],
-                                           seat_number=key)
-                    print(resp)
-                    return resp
+                if seats[key] is not None:
+                    if seats[key]['ticket'] == pk:
+                        resp = getInfoResponse(ticket=pk,
+                                               name=seats[key]['name'],
+                                               seat_number=key)
+                        print(resp)
+                        return resp
 
             print(seats)
             return Response(data={
@@ -140,6 +141,11 @@ class getInfo(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
 
         elif pk.isnumeric():
+            if int(pk) >= settings.MAX_OCCUPANCY:
+                return Response(data={
+                    "Message": "Seat number doesn't exist!"},
+                    status=status.HTTP_404_NOT_FOUND)
+
             error_message = "No seat is booked with this seat number"
             for key, value in seats.items():
                 if key == int(pk) and seats[key] is not None:
@@ -157,12 +163,13 @@ class getInfo(APIView):
         else:
             error_message = "No seat is booked with the provided name!"
             for key, value in seats.items():
-                if seats[key]['name'] == pk:
-                    resp = getInfoResponse(ticket=seats[key]['ticket'],
-                                           name=pk,
-                                           seat_number=key)
-                    print(resp)
-                    return resp
+                if seats[key] is not None:
+                    if seats[key]['name'] == pk:
+                        resp = getInfoResponse(ticket=seats[key]['ticket'],
+                                               name=pk,
+                                               seat_number=key)
+                        print(resp)
+                        return resp
 
             print(seats)
             return Response(data={
