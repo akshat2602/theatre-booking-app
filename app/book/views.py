@@ -109,7 +109,7 @@ class getInfo(generics.RetrieveAPIView):
         if is_uuid(pk):
             error_message = "No seat is booked with the provided ticket ID!"
             for key, value in seats.items():
-                if seats[key] == pk:
+                if seats[key]['ticket'] == pk:
                     resp = getInfoResponse(ticket=pk,
                                            name=seats[key]['name'],
                                            seat_number=key)
@@ -119,10 +119,10 @@ class getInfo(generics.RetrieveAPIView):
                     "Message": error_message
                 }, status=status.HTTP_404_NOT_FOUND)
 
-        elif type(pk) == int or type(pk) == float:
-            error_message = ""
+        elif pk.isnumeric():
+            error_message = "No seat is booked with this seat number"
             for key, value in seats.items():
-                if key == pk:
+                if key == int(pk) and seats[key] is not None:
                     resp = getInfoResponse(ticket=seats[key]['ticket'],
                                            name=seats[key]['name'],
                                            seat_number=pk)
