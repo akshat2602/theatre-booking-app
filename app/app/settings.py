@@ -28,7 +28,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DEBUG']
 
 ALLOWED_HOSTS = ['0.0.0.0']
 
@@ -96,7 +96,7 @@ REST_FRAMEWORK = {
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
-
+CSRF_COOKIE_SECURE = True
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 

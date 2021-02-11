@@ -12,7 +12,7 @@ class SeatAllotSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=50)
 
 
-class SeatAllotResponseSerializer(serializers.Serializer):
+class SeatInfoResponseSerializer(serializers.Serializer):
     def create(self, validated_data):
         pass
 
