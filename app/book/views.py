@@ -60,8 +60,6 @@ class occupySeat(generics.CreateAPIView):
                         return Response(data={
                             "Message": error_message
                         }, status=status.HTTP_409_CONFLICT)
-                    else:
-                        pass
                 else:
                     seats[key] = {"ticket": ticket, "name": name}
                     seat_number = key
