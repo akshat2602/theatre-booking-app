@@ -132,7 +132,8 @@ class test_get_info(APITestCase):
 
     def test_by_seat_number(self):
         """
-        Test to get info by seat number and return not found if seat number is not found
+        Test to get info by seat number and
+        return not found if seat number is not found
         """
         data = {
             "seat_number": 1

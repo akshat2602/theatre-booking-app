@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.shortcuts import redirect
 from django.urls import path, include, re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
