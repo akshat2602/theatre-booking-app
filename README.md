@@ -19,16 +19,16 @@
 This project is a simple server that manages Theatre occupancy. It is built using Python and Django alongside Django REST Framework. Apart from this no other libraries or databases have been used.
 You are building an application for a new theatre in town. The backend application is supposed to be used by users in the theatre to gauge and manage occupancy. The theatre is a new Arena theatre for live performances and does not assign fixed seating number assignments to its patrons. 3 API endpoints have been developed as mentioned below:
 
-###Occupy a seat -[Endpoint URL - /occupy/ ] 
+### Occupy a seat -[Endpoint URL - /occupy/ ] 
 The Endpoint will be given the person's name and ticket ID (this should be a UUID field, tickets will not contain information about the seat number beforehand) as input and outputs the seat number which will be occupied. If the seating is full, the appropriate error message is returned.
 
-###Vacate a seat - [Endpoint URL - /vacate/ ]: 
+### Vacate a seat - [Endpoint URL - /vacate/ ]: 
 This Endpoint takes the seat number which the person will be vacating and frees that slot up to be used by other people.
 
-###Get Person/Seat information - [Endpoint URL - /get_info/<NAME or SEATNUM or TICKETID> ]: 
+### Get Person/Seat information - [Endpoint URL - /get_info/<NAME or SEATNUM or TICKETID> ]: 
 This Endpoint can take either the seat number or person’s name or ticket ID for the input and returns the person’s name, ticket ID, and slot number.
 
-###Get number of empty seats - [Endpoint URL - /get_empty_seats/ ]:
+### Get number of empty seats - [Endpoint URL - /get_empty_seats/ ]:
 This Endpoint doesn't take any data and returns the number of empty seats in the theatre. 
 
 ## Start Server Locally :
