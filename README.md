@@ -1,4 +1,4 @@
-# <p style="text-align: center;">Theatre Booking App </p>
+# <p style="align: center;">Theatre Booking App </p>
 <br>
 <h6 align="center">
 
