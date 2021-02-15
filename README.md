@@ -31,6 +31,10 @@ This Endpoint can take either the seat number or person’s name or ticket ID fo
 ### Get number of empty seats - [Endpoint URL - /get_empty_seats/ ]:
 This Endpoint doesn't take any data and returns the number of empty seats in the theatre. 
 
+## Screenshot of Swagger API Docs :
+![Swagger API Docs](https://github.com/akshat2602/theatre-booking-app/blob/master/screenshots/image.png?raw=true)
+
+
 ## Start Server Locally :
 * ### Docker Image - 
    **Make sure you have docker installed. If not, refer: https://docs.docker.com/install/** \
