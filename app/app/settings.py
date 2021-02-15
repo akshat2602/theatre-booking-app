@@ -44,11 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'book.apps.BookConfig',
     'drf_yasg',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -110,7 +112,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-MAX_OCCUPANCY = int(os.environ["MAX_OCCUPANCY"])
+MAX_OCCUPANCY = int(os.environ.get("MAX_OCCUPANCY", 10))
+
+CORS_ALLOW_ALL_ORIGINS = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
