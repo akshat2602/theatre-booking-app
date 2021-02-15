@@ -13,6 +13,7 @@
 #### Email : [akshatsharma2602@gmail.com](mailto:akshatsharma2602@gmail.com)
 #### Linkedin : [https://www.linkedin.com/in/akshat-sharma-2602/](https://www.linkedin.com/in/akshat-sharma-2602/)
 #### Github : [https://github.com/akshat2602](https://github.com/akshat2602)
+#### Online Repo : [https://github.com/akshat2602/theatre-booking-app](https://github.com/akshat2602/theatre-booking-app)
 #### Deployed project available on this url : [https://theatre-booking-app.herokuapp.com/](https://theatre-booking-app.herokuapp.com/)  
 
 ## About the project :
