@@ -1,7 +1,6 @@
 from django.conf import settings
 from rest_framework import status, generics
 from rest_framework.response import Response
-from uuid import UUID
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from .serializers import SeatAllotSerializer, \
@@ -10,30 +9,9 @@ from .serializers import SeatAllotSerializer, \
     MessageSerializer, \
     AvailableSeatSerializer
 from .permissions import seatNumberCheckPermission
+from .utils import is_uuid, is_number, getInfoResponse
 
 seats = dict.fromkeys(i for i in range(1, settings.MAX_OCCUPANCY + 1))
-
-
-def is_uuid(string):
-    try:
-        uuid_object = UUID(string, version=4)
-    except ValueError:
-        return False
-    return str(uuid_object) == string
-
-
-def getInfoResponse(ticket, name, seat_number):
-    serializer = SeatInfoResponseSerializer(
-        data={
-            "seat_number": seat_number,
-            "ticket": ticket,
-            "name": name
-        })
-    if serializer.is_valid():
-        return Response(data=serializer.data,
-                        status=status.HTTP_302_FOUND)
-    return Response(data=serializer.errors,
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class occupySeat(generics.CreateAPIView):
@@ -93,7 +71,7 @@ class occupySeat(generics.CreateAPIView):
                         status=status.HTTP_404_NOT_FOUND)
 
 
-class vacateSeat(APIView):
+class vacateSeat(generics.DestroyAPIView):
     serializer_class = VacateSeatSerializer
     permission_classes = (seatNumberCheckPermission,)
 
@@ -104,27 +82,31 @@ class vacateSeat(APIView):
         Request: Send seat number in request to vacate the seat
         Response: Return a message of success or failure
         """
-        seat_number = request.data['seat_number']
-        if settings.MAX_OCCUPANCY >= seat_number:
-            if seats[seat_number]:
-                seats[seat_number] = None
-                print(seats)
-                message = {
-                    "message": "The provided seat number has been vacated!"
-                }
-                serializer = MessageSerializer(data=message)
-                serializer.is_valid()
-                return Response(data=serializer.data,
-                                status=status.HTTP_200_OK)
-            else:
-                print(seats)
-                error_message = {
-                    "message": "The provided seat number is vacant already!"
-                }
-                serializer = MessageSerializer(data=error_message)
-                serializer.is_valid()
-                return Response(data=serializer.data,
-                                status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            if settings.MAX_OCCUPANCY >= serializer.data['seat_number']:
+                if seats[serializer.data['seat_number']] is not None:
+                    seats[serializer.data['seat_number']] = None
+                    print(seats)
+                    message = {
+                        "message": "The provided seat number has been vacated!"
+                    }
+                    message_serializer = MessageSerializer(data=message)
+                    message_serializer.is_valid()
+                    return Response(data=message_serializer.data,
+                                    status=status.HTTP_200_OK)
+                else:
+                    print(seats)
+                    error_message = {
+                        "message": "This seat number is vacant already!"
+                    }
+                    message_serializer = MessageSerializer(data=error_message)
+                    message_serializer.is_valid()
+                    return Response(data=message_serializer.data,
+                                    status=status.HTTP_404_NOT_FOUND)
+
+        return Response(data=serializer.errors,
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class getInfo(APIView):
@@ -156,15 +138,15 @@ class getInfo(APIView):
             return Response(data=serializer.data,
                             status=status.HTTP_404_NOT_FOUND)
 
-        elif pk.isnumeric():
-            if int(pk) >= settings.MAX_OCCUPANCY:
+        elif is_number(pk):
+            if int(pk) >= settings.MAX_OCCUPANCY or int(pk) <= 0:
                 error_message = {
                     "message": "Seat number doesn't exist!"
                 }
                 serializer = MessageSerializer(data=error_message)
                 serializer.is_valid()
                 return Response(data=serializer.data,
-                                status=status.HTTP_404_NOT_FOUND)
+                                status=status.HTTP_400_BAD_REQUEST)
 
             error_message = {
                 "message": "No seat is booked with this seat number"
