@@ -28,7 +28,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DEBUG']
 
 ALLOWED_HOSTS = ['*']
 
@@ -111,7 +111,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-MAX_OCCUPANCY = 10
+MAX_OCCUPANCY = int(os.environ["MAX_OCCUPANCY"])
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
