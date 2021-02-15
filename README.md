@@ -12,12 +12,13 @@
 
 #### Email : [akshatsharma2602@gmail.com](mailto:akshatsharma2602@gmail.com)
 #### Linkedin : [https://www.linkedin.com/in/akshat-sharma-2602/](https://www.linkedin.com/in/akshat-sharma-2602/)
-#### Github : [https://github.com/akshat2602](https://github.com/akshat2602)    
-
+#### Github : [https://github.com/akshat2602](https://github.com/akshat2602)
+#### Deployed project available on this url : [https://theatre-booking-app.herokuapp.com/](https://theatre-booking-app.herokuapp.com/)  
 
 ## About the project :
 This project is a simple server that manages Theatre occupancy. It is built using Python and Django alongside Django REST Framework. Apart from this no other libraries or databases have been used.
-The backend application is supposed to be used by users in the theatre to gauge and manage occupancy. The theatre is a new Arena theatre for live performances and does not assign fixed seating number assignments to its patrons. 4 API endpoints have been developed as mentioned below:
+The backend application is supposed to be used by users in the theatre to gauge and manage occupancy. The theatre is a new Arena theatre for live performances and does not assign fixed seating number assignments to its patrons. 
+The application has been deployed online on heroku. 4 API endpoints have been developed as mentioned below:
 
 ### Occupy a seat -[Endpoint URL - /occupy/ ] 
 The Endpoint will be given the person's name and ticket ID (this should be a UUID field, tickets will not contain information about the seat number beforehand) as input and outputs the seat number which will be occupied. If the seating is full, the appropriate error message is returned.
@@ -55,19 +56,21 @@ This Endpoint doesn't take any data and returns the number of empty seats in the
 
 
 ## Highlights of the Project :
-* PEP-8 Coding guidelines followed
-* Docker used to containerize the project
-* Used Django Server for backend
-* Added several tests for the Django project
-* API Endpoints created for seat booking, vacating a seat and getting info related to a booked seat
-* Used Swagger for API Documentation 
+* PEP-8 Coding guidelines followed.
+* Docker used to containerize the project.
+* Used Django Server for backend.
+* Added several tests for the Django project.
+* API Endpoints created for seat booking, vacating a seat and getting info related to a booked seat alongside number of empty seats in the theatre.
+* Used Swagger for API Documentation.
 
 
 ## Details of the project :
+ * Project has been deployed on heroku on the url given above.
+ * Auto deployment has been configured using heroku.  
  * Project can be used by the theatre authorities to book a seat.
  * Project can be used by the theatre authorities to vacate a seat.
  * Project can be used by the theatre authorities to get details of a booking.
  * The number of seats available in the theatre can be configured using the .env file.
  * No database usage is allowed, hence, all the information regarding a ticket is stored in a dictionary which is initialized as soon as the server starts.
  * Apart from the specified endpoints in the task description another endpoint is added to show number of empty seats in the theatre.
- * API documentation has been implemented on the endpoint `localhost:8000/swagger/`
+ * API documentation is available online on: [https://theatre-booking-app.herokuapp.com/](https://theatre-booking-app.herokuapp.com/)  
