@@ -14,7 +14,7 @@
 #### Linkedin : [https://www.linkedin.com/in/akshat-sharma-2602/](https://www.linkedin.com/in/akshat-sharma-2602/)
 #### Github : [https://github.com/akshat2602](https://github.com/akshat2602)
 #### Online Repo : [https://github.com/akshat2602/theatre-booking-app](https://github.com/akshat2602/theatre-booking-app)
-#### Deployed project available on this url : [https://theatre-booking-app.herokuapp.com/](https://theatre-booking-app.herokuapp.com/)  
+#### Deployed project available on this url : [http://theatre-booking-app.herokuapp.com/](http://theatre-booking-app.herokuapp.com/)  
 
 ## About the project :
 This project is a simple server that manages Theatre occupancy. It is built using Python and Django alongside Django REST Framework. Apart from this no other libraries or databases have been used.
@@ -74,4 +74,4 @@ This Endpoint doesn't take any data and returns the number of empty seats in the
  * The number of seats available in the theatre can be configured using the .env file.
  * No database usage is allowed, hence, all the information regarding a ticket is stored in a dictionary which is initialized as soon as the server starts.
  * Apart from the specified endpoints in the task description another endpoint is added to show number of empty seats in the theatre.
- * API documentation is available online on: [https://theatre-booking-app.herokuapp.com/](https://theatre-booking-app.herokuapp.com/)  
+ * API documentation is available online on: [http://theatre-booking-app.herokuapp.com/](http://theatre-booking-app.herokuapp.com/)  
