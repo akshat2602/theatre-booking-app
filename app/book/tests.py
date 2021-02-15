@@ -63,7 +63,7 @@ class VacateSeatTestCase(APITestCase):
             "seat_number": response.data['seat_number']
         }
         response = self.client.delete(self.delete_url, vacate_data)
-        self.assertEqual(204, response.status_code)
+        self.assertEqual(200, response.status_code)
 
     def test_seat_number(self):
         """
@@ -145,4 +145,4 @@ class test_get_info(APITestCase):
         }
         response = self.client.get(self.getInfo_url(data['seat_number']))
         print(response.data)
-        self.assertEqual(404, response.status_code)
+        self.assertEqual(400, response.status_code)

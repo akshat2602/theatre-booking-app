@@ -37,8 +37,8 @@ This Endpoint doesn't take any data and returns the number of empty seats in the
 ![Swagger API Docs](https://github.com/akshat2602/theatre-booking-app/blob/master/screenshots/image.png?raw=true)
 
 
-## Start Server Locally :
-* ### Docker Image - 
+## Start server locally :
+* ### Docker image - 
    **Make sure you have docker installed. If not, refer: https://docs.docker.com/install/** \
    `docker-compose build app` \
    `docker-compose up app`
@@ -54,9 +54,9 @@ This Endpoint doesn't take any data and returns the number of empty seats in the
     **6.** `pip install -r requirements.txt`\
     **7. Run Tests -** `python manage.py test`\
     **8. Run Server -** `python manage.py runserver`
+  
 
-
-## Highlights of the Project :
+## Highlights of the project :
 * PEP-8 Coding guidelines followed.
 * Docker used to containerize the project.
 * Used Django Server for backend.

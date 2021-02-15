@@ -4,6 +4,7 @@ from .serializers import SeatInfoResponseSerializer
 from rest_framework import status
 
 
+# Function to check if a string is UUID
 def is_uuid(string):
     try:
         uuid_object = UUID(string, version=4)
@@ -12,6 +13,7 @@ def is_uuid(string):
     return str(uuid_object) == string
 
 
+# Function to check if a string is numeric
 def is_number(s):
     try:
         float(s)
@@ -20,6 +22,7 @@ def is_number(s):
         return False
 
 
+# Function to return response so that code is not repetitive
 def getInfoResponse(ticket, name, seat_number):
     serializer = SeatInfoResponseSerializer(
         data={
