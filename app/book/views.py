@@ -23,22 +23,14 @@ class occupySeat(generics.CreateAPIView):
         Request: Send ticket id and name to book a seat
         Response: Returns ticket id, name and seat number if success
         """
+        seat_number = -1
         serializer = self.serializer_class(data=request.data)
-        if seats[settings.MAX_OCCUPANCY] is not None:
-            error_message = {
-                "message": "Theatre is fully occupied!"
-            }
-            serializer = MessageSerializer(data=error_message)
-            serializer.is_valid()
-            return Response(data=serializer.data,
-                            status=status.HTTP_403_FORBIDDEN)
         if serializer.is_valid():
             name = serializer.data['name']
             error_message = {
                 "message": "A ticket with this UUID has already been booked!"
             }
             ticket = serializer.data['ticket']
-            seat_number = 0
             for key, values in seats.items():
                 if seats[key] is not None:
                     if seats[key]['ticket'] == ticket:
@@ -50,6 +42,14 @@ class occupySeat(generics.CreateAPIView):
                     seats[key] = {"ticket": ticket, "name": name}
                     seat_number = key
                     break
+            if seat_number == -1:
+                error_message = {
+                    "message": "Theatre is fully occupied!"
+                }
+                serializer = MessageSerializer(data=error_message)
+                serializer.is_valid()
+                return Response(data=serializer.data,
+                                status=status.HTTP_403_FORBIDDEN)
             print("Seat number allotted is: ", str(seat_number))
             data = {
                 "ticket": serializer.data['ticket'],
@@ -75,7 +75,7 @@ class vacateSeat(generics.DestroyAPIView):
     serializer_class = VacateSeatSerializer
     permission_classes = (seatNumberCheckPermission,)
 
-    @swagger_auto_schema(request_body=VacateSeatSerializer,
+    @swagger_auto_schema(query_serializer=VacateSeatSerializer,
                          responses={200: MessageSerializer})
     def delete(self, request, *args, **kwargs):
         """
